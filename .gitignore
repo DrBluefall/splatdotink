@@ -60,6 +60,7 @@ Makefile
 ### Autotools+strict Patch ###
 # Generated source files
 configure
+configure~
 splatdotink.pc
 compile_commands.json
 

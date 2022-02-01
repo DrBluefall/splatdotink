@@ -23,7 +23,9 @@ with splatdotink. If not, see <https://www.gnu.org/licenses/>.
 #include <splatdotink.hpp>
 #include <stdexcept>
 #include <string>
+#ifdef SDI_DEBUG_BUILD
 #include <sample_data.h>
+#endif
 #define SDI_DATA_URL "https://splatoon2.ink/data/"
 
 using json = nlohmann::json;
@@ -98,13 +100,12 @@ namespace splatdotink {
         , m_ranked(std::vector<Rotation>())
         , m_league(std::vector<Rotation>()) {
 
-#ifndef _DEBUG_ASSERTIONS
+#ifndef SDI_DEBUG_BUILD
         cpr::Response r(cpr::Get(cpr::Url { SDI_DATA_URL "schedules.json" },
                                  cpr::Header { "User-Agent", "splatdotink-lib/" PACKAGE_VERSION }));
 
         if (r.status_code != 200) throw std::runtime_error(r.error.message);
 
-        std::cout << r.status_code << std::endl << r.text << std::endl;
         std::string text{r.text};
 #else
 

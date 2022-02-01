@@ -35,6 +35,9 @@ libsplatdotink_la_CPPFLAGS = -I$(top_srcdir)/src/include @CPR_CFLAGS@ @NHJSON_CF
 libsplatdotink_la_LDFLAGS = @CPR_LIBS@ -release @PACKAGE_VERSION@
 pkgconfig_DATA = splatdotink.pc
 
+if SDI_DEBUG_BUILD
+libsplatdotink_la_SOURCES += src/include/sample_data.h
+endif
 
 
 LIBTOOL_DEPS = @LIBTOOL_DEPS@

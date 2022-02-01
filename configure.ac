@@ -33,8 +33,11 @@ AC_SUBST([PACKAGE_DESCRIPTION])
 AC_ARG_ENABLE([debug],
                 [AS_HELP_STRING([--enable-debug],
                     [enable various debugging lines in the library. (defaults to no)])],
-                [AC_DEFINE([SDI_DEBUG_BUILD])])
+                [enable_debug=$enableval],
+                [: m4_divert_text([DEFAULTS], [enable_debug=no])])
 
+AM_CONDITIONAL([SDI_DEBUG_BUILD], [test "x$enable_debug" != "xno"])
+AS_IF([test "x$enable_debug" != "xno"], [AC_DEFINE([SDI_DEBUG_BUILD])])
 
 dnl Define the directory for pkg-config.
 PKG_INSTALLDIR

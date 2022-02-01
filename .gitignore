@@ -16,6 +16,7 @@ ylwrap
 *.trs
 test/
 !test/*.cpp
+*.tar.gz
 
 # http://www.gnu.org/software/autoconf
 

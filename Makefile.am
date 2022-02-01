@@ -30,9 +30,9 @@ ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES = libsplatdotink.la
 
 pkginclude_HEADERS = src/include/splatdotink.hpp
-libsplatdotink_la_SOURCES = src/lib.cpp $(include_HEADERS)
-libsplatdotink_la_CPPFLAGS = -I$(top_srcdir)/src/include @RESTCLIENT_CFLAGS@ @NHJSON_CFLAGS@
-libsplatdotink_la_LDFLAGS = @RESTCLIENT_LIBS@ -release @PACKAGE_VERSION@
+libsplatdotink_la_SOURCES = src/lib.cpp
+libsplatdotink_la_CPPFLAGS = -I$(top_srcdir)/src/include @CPR_CFLAGS@ @NHJSON_CFLAGS@
+libsplatdotink_la_LDFLAGS = @CPR_LIBS@ -release @PACKAGE_VERSION@
 pkgconfig_DATA = splatdotink.pc
 
 
@@ -46,9 +46,9 @@ libtool: $(LIBTOOL_DEPS)
 # TEST FRAMEWORK #
 ##################
 
-TESTS=test/test
+TESTS=test/sanity
 
-check_PROGRAMS = test/test
-test_test_SOURCES = test/sanity.cpp
-test_test_CPPFLAGS = -I$(top_srcdir)/src/include
-test_test_LDADD = libsplatdotink.la
+check_PROGRAMS = test/sanity
+test_sanity_SOURCES = test/sanity.cpp
+test_sanity_CPPFLAGS = -I$(top_srcdir)/src/include
+test_sanity_LDADD = libsplatdotink.la

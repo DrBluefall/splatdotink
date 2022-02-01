@@ -12,6 +12,10 @@ py-compile
 test-driver
 ylwrap
 .deps/
+*.log
+*.trs
+test/
+!test/*.cpp
 
 # http://www.gnu.org/software/autoconf
 

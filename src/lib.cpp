@@ -18,13 +18,16 @@ with splatdotink. If not, see <https://www.gnu.org/licenses/>.
 #include <chrono>
 #include <exception>
 #include <nlohmann/json.hpp>
+#include <cpr/cpr.h>
 #include <ostream>
-#include <restclient-cpp/restclient.h>
 #include <splatdotink.hpp>
 #include <stdexcept>
 #include <string>
+#include <sample_data.h>
+#define SDI_DATA_URL "https://splatoon2.ink/data/"
 
 using json = nlohmann::json;
+
 
 namespace splatdotink {
 
@@ -94,9 +97,22 @@ namespace splatdotink {
         : m_turf(std::vector<Rotation>())
         , m_ranked(std::vector<Rotation>())
         , m_league(std::vector<Rotation>()) {
-        RestClient::Response resp = RestClient::get("https://splatoon2.ink/data/schedules.json");
 
-        json j = json::parse(resp.body);
+#ifndef _DEBUG_ASSERTIONS
+        cpr::Response r(cpr::Get(cpr::Url { SDI_DATA_URL "schedules.json" },
+                                 cpr::Header { "User-Agent", "splatdotink-lib/" PACKAGE_VERSION }));
+
+        if (r.status_code != 200) throw std::runtime_error(r.error.message);
+
+        std::cout << r.status_code << std::endl << r.text << std::endl;
+        std::string text{r.text};
+#else
+
+        std::string text(reinterpret_cast<char*>(test_sample_data_json), test_sample_data_json_len);
+
+#endif
+
+        json j(json::parse(text));
 
         for (const json& obj : j["regular"]) {
             m_turf.push_back(Rotation(obj));

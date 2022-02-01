@@ -1,0 +1,7 @@
+# -*- ini -*-
+[requires]
+cpr/1.7.2
+nlohmann_json/3.10.5
+
+[generators]
+pkg_config

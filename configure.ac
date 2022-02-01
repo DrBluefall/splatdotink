@@ -30,6 +30,12 @@ with splatdotink. If not, see <https://www.gnu.org/licenses/>.
 PACKAGE_DESCRIPTION="A client for splatoon2.ink."
 AC_SUBST([PACKAGE_DESCRIPTION])
 
+AC_ARG_ENABLE([debug],
+                [AS_HELP_STRING([--enable-debug],
+                    [enable various debugging lines in the library. (defaults to no)])],
+                [AC_DEFINE([SDI_DEBUG_BUILD])])
+
+
 dnl Define the directory for pkg-config.
 PKG_INSTALLDIR
 
@@ -40,7 +46,7 @@ dnl Verify the C++ compiler.
 AC_PROG_CXX
 
 dnl Check for restclient-cpp
-AX_PKG_CHECK_MODULES([RESTCLIENT],[restclient-cpp],[],[],[AC_MSG_ERROR([cannot find library 'restclient-cpp'. Install it from https://github.com/mrtazz/restclient-cpp or your system package manager.])])
+AX_PKG_CHECK_MODULES([CPR],[cpr],[],[],[AC_MSG_ERROR([cannot find library 'cpr'. Install it from https://github.com/libcpr/cpr or your system package manager.])])
 
 dnl Check for nlohmann::json
 AX_PKG_CHECK_MODULES([NHJSON],[nlohmann_json],[],[],[AC_MSG_ERROR([cannot find library 'nlohmann_json'. Install it from https://github.com/nlohmann/json or your system package manager.])])

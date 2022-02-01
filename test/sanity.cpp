@@ -1,5 +1,6 @@
 #include <iostream>
 #include <splatdotink.hpp>
+  ;
 
 int main() {
     auto schedules = splatdotink::Schedules();

@@ -16,9 +16,9 @@ You should have received a copy of the GNU Lesser General Public License along
 with splatdotink. If not, see <https://www.gnu.org/licenses/>.
 */
 #include <chrono>
+#include <cpr/cpr.h>
 #include <exception>
 #include <nlohmann/json.hpp>
-#include <cpr/cpr.h>
 #include <ostream>
 #include <splatdotink.hpp>
 #include <stdexcept>
@@ -29,7 +29,6 @@ with splatdotink. If not, see <https://www.gnu.org/licenses/>.
 #define SDI_DATA_URL "https://splatoon2.ink/data/"
 
 using json = nlohmann::json;
-
 
 namespace splatdotink {
 
@@ -98,9 +97,10 @@ namespace splatdotink {
     Schedules Schedules::fetch() {
 #ifndef SDI_DEBUG_BUILD
         cpr::Response r(cpr::Get(cpr::Url { SDI_DATA_URL "schedules.json" },
-                                 cpr::Header { "User-Agent", "splatdotink-lib/" PACKAGE_VERSION }));
+            cpr::Header { "User-Agent", "splatdotink-lib/" PACKAGE_VERSION }));
 
-        if (r.status_code != 200) throw std::runtime_error(r.error.message);
+        if (r.status_code != 200)
+            throw std::runtime_error(r.error.message);
 
         return Schedules(r.text);
 #else

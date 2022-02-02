@@ -95,23 +95,25 @@ namespace splatdotink {
     std::vector<Rotation> Schedules::ranked() const { return m_ranked; }
     std::vector<Rotation> Schedules::league() const { return m_league; }
 
-    Schedules::Schedules()
-        : m_turf(std::vector<Rotation>())
-        , m_ranked(std::vector<Rotation>())
-        , m_league(std::vector<Rotation>()) {
-
+    Schedules Schedules::fetch() {
 #ifndef SDI_DEBUG_BUILD
         cpr::Response r(cpr::Get(cpr::Url { SDI_DATA_URL "schedules.json" },
                                  cpr::Header { "User-Agent", "splatdotink-lib/" PACKAGE_VERSION }));
 
         if (r.status_code != 200) throw std::runtime_error(r.error.message);
 
-        std::string text{r.text};
+        return Schedules(r.text);
 #else
 
         std::string text(reinterpret_cast<char*>(test_sample_data_json), test_sample_data_json_len);
-
+        return Schedules(text);
 #endif
+    }
+
+    Schedules::Schedules(std::string text)
+        : m_turf()
+        , m_ranked()
+        , m_league() {
 
         json j(json::parse(text));
 

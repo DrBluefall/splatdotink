@@ -1,9 +1,8 @@
 #include <iostream>
 #include <splatdotink.hpp>
-  ;
 
 int main() {
-    auto schedules = splatdotink::Schedules();
+    auto schedules = splatdotink::Schedules::fetch();
 
     for (auto rotation : schedules.turf()) {
         std::cout << rotation.stage_a().name() << ":" << rotation.mode() << std::endl;

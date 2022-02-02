@@ -74,7 +74,8 @@ namespace splatdotink {
         std::vector<Rotation> turf() const;
         std::vector<Rotation> ranked() const;
         std::vector<Rotation> league() const;
-        Schedules();
+        Schedules(std::string);
+        static Schedules fetch();
     };
 }
 

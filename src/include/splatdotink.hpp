@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cstdint>
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <ostream>
 #include <string>
 
@@ -77,6 +78,34 @@ namespace splatdotink {
         Schedules(std::string);
         static Schedules fetch();
     };
+
+    namespace salmonrun {
+
+        class Rotation {
+          public:
+            struct Weapon {
+                std::uint16_t id;
+                std::string name;
+            };
+            Rotation(std::chrono::system_clock::time_point m_start,
+                std::chrono::system_clock::time_point m_end,
+                std::optional<std::string> m_stage,
+                std::optional<std::vector<Weapon>> weapons);
+            std::chrono::system_clock::time_point start_time();
+            std::chrono::system_clock::time_point end_time();
+            std::optional<std::string> stage();
+            std::optional<std::vector<Weapon>> weapons();
+
+          private:
+            std::chrono::system_clock::time_point m_start_time;
+            std::chrono::system_clock::time_point m_end_time;
+            std::optional<std::string> m_stage;
+            std::optional<std::vector<Weapon>> m_weapons;
+        };
+
+        std::vector<Rotation> fetch();
+
+    }; // namespace salmonrun
 }
 
 #endif // SPLATDOTINK_H_

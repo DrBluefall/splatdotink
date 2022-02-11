@@ -127,4 +127,60 @@ namespace splatdotink {
             m_league.push_back(Rotation(obj));
         }
     }
+
+    namespace salmonrun {
+
+        Rotation::Rotation(std::chrono::system_clock::time_point m_start,
+            std::chrono::system_clock::time_point m_end,
+            std::optional<std::string> m_stage,
+            std::optional<std::vector<Weapon>> weapons)
+            : m_start_time(m_start)
+            , m_end_time(m_end)
+            , m_stage(m_stage)
+            , m_weapons(weapons) { }
+
+        std::vector<Rotation> fetch() {
+
+#ifdef SDI_DEBUG_BUILD
+#include <salmon_sample.h>
+            std::string text(reinterpret_cast<char*>(test_salmon_sample_json), test_salmon_sample_json_len);
+#else
+            cpr::Response r(cpr::Get(cpr::Url { SDI_DATA_URL "coop-schedules.json" }),
+                cpr::Header { "User-Agent", "splatdotink-lib/" PACKAGE_VERSION });
+            if (r.status_code != 200)
+                throw std::runtime_error(r.error.message);
+
+            std::string text(r.text);
+#endif
+
+            json j(json::parse(text));
+
+            auto schedules(j["schedules"]);
+            auto details(j["details"]);
+
+            std::vector<Rotation> ret;
+
+            for (int i = 0; i < 5; i++) {
+                std::chrono::system_clock::time_point start{std::chrono::seconds(schedules[i]["start_time"])};
+                std::chrono::system_clock::time_point end{std::chrono::seconds(schedules[i]["end_time"])};
+
+                std::optional<std::string> stage(std::nullopt);
+                std::optional<std::vector<Rotation::Weapon>> weapons(std::nullopt);
+
+                if (i < 2) {
+                    stage = details[i]["stage"]["name"];
+                    weapons = {};
+                    for (auto& weapon: details[i]["weapons"]) {
+                        weapons.value().push_back({ weapon["id"], weapon["weapon"]["name"] });
+                    }
+                }
+
+                ret.push_back(Rotation(start, end, stage, weapons));
+            }
+
+            return ret;
+        }
+
+    }; // namespace salmonrun
+
 } // namespace splatdotink
